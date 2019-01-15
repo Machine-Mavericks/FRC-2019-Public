@@ -1,5 +1,5 @@
 # FRC-2019-Build
-Formal build (in-progress) of Machine Mavericks robot control system using 2019 FRC libraries
+Development build of Machine Mavericks robot control system using 2019 FRC libraries
 
 Repository includes source (src) files folder. Copy 'src' folder into main robot project folder and rebuild project
 Requires: 2019 FRC Studio and WPI libraries, and Victor SPX libraries installed.fs

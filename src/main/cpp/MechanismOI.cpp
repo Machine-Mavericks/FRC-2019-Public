@@ -7,13 +7,13 @@
 
 #include <frc/WPILib.h>
 #include "MechanismOI.h"
-
+#include "RobotMap.h"
 // class constructor - executed upon creation of MechanismOI object
 // creates joystick operator interfaces
 MechanismOI::MechanismOI() {
 
     // create operator joystick objects
-    MechanismJoystick = new Joystick(3);
+    MechanismJoystick = new Joystick(MECHANISM_CONTROLLER_PORT);
 
     // create robot operator button objects and associate with operator joystick and button #
     MechanismJoystickButton1 = new JoystickButton(MechanismJoystick,1);

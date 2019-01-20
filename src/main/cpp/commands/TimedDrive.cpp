@@ -5,54 +5,57 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// Tank drive command allows robot to be driven in tank mode.
-// This is the default command when robot in teleop mode
-
-#include "commands/TankDrive.h"
+#include "commands/TimedDrive.h"
 #include "Robot.h"
-#include <math.h>
-#include "RobotMap.h"
 
-TankDrive::TankDrive() {
+TimedDrive::TimedDrive() {
+  // Use Requires() here to declare subsystem dependencies
+  // eg. Requires(Robot::chassis.get());
+
   // Use Requires() here to declare subsystem dependencies
   Requires (&Robot::m_MainDrive);
 
-  // tank drive command is interruptable
+  // tank drive command is interruptible
   SetInterruptible(true);
 
   // command is not to run when robot is disabled
   SetRunWhenDisabled(false);
+
+
 }
 
 // Called just before this Command runs the first time
-void TankDrive::Initialize() {}
+void TimedDrive::Initialize() {
+
+  // Set driveTime to 0
+  driveTime = 0;
+
+}
 
 // Called repeatedly when this Command is scheduled to run
-void TankDrive::Execute() {
-  // create variables for left and right joystick y axes
-  float raw_left_y, raw_right_y, left_y, right_y;
+void TimedDrive::Execute() {
 
-  // get joystick y values from joystick
-  raw_left_y = Robot::m_DriverOI.LeftJoystick->GetRawAxis(1);
-  raw_right_y = Robot::m_DriverOI.RightJoystick->GetRawAxis(1);
+  // increment timer by delta t
+  driveTime = driveTime + 0.02;
 
-  // implement throttle curve
-  right_y = LINEAR_WEIGHT * raw_right_y + CUBIC_WEIGHT * pow(raw_right_y, 3); 
-  left_y = LINEAR_WEIGHT * raw_left_y + CUBIC_WEIGHT * pow(raw_left_y, 3); 
+  // turn on motors
+  Robot::m_MainDrive.Drive (0.2, -0.2);
 
-  // set main drive tank speeds
-  Robot::m_MainDrive.Drive (left_y, right_y);
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool TankDrive::IsFinished() {
-  // since this is default mode, always return false - command never ends
-  return false;
+bool TimedDrive::IsFinished() { 
+  if (driveTime >= 3)
+    return true;
+  else 
+    return false;
+
+
 }
 
 // Called once after isFinished returns true
-void TankDrive::End() {}
+void TimedDrive::End() {}
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void TankDrive::Interrupted() {}
+void TimedDrive::Interrupted() {}

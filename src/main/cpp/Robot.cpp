@@ -8,13 +8,23 @@
 #include "Robot.h"
 #include <frc/commands/Scheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/Encoder.h>
+#include <frc/Joystick.h>
+#include <frc/PWMVictorSPX.h>
+#include <frc/TimedRobot.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-
+constexpr double kPi = 3.14159265358979;
 
 DriverOI Robot::m_DriverOI;
 MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
+NavX Robot::m_NavX;
+//StraightDrive Robot::m_StraightDrive;
+frc::Encoder m_encoder{2,3};
+frc::Encoder m_encoder1{0,1};
+
 
 // ------------------------ General (All Modes) --------------------
 
@@ -23,6 +33,11 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  // Use SetDistancePerPulse to set the multiplier for GetDistance
+  // This is set up assuming a 6 inch wheel with a 360 CPR encoder.
+  m_encoder.SetDistancePerPulse((kPi * 6) / 360.0);
+  m_encoder1.SetDistancePerPulse((kPi * 6) / 360.0);
+
 }
 
 // This function is called every robot packet, no matter the mode. Use
@@ -30,7 +45,14 @@ void Robot::RobotInit() {
 // autonomous, teleoperated and test.
 // <p> This runs after the mode specific periodic functions, but before
 // LiveWindow and SmartDashboard integrated updating. */
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+  frc::SmartDashboard::PutNumber("Encoder", m_encoder.GetDistance());
+  frc::SmartDashboard::PutNumber("Encoder1", m_encoder1.GetDistance());
+  frc::SmartDashboard::PutNumber("Roll", m_NavX.GetRoll());
+  frc::SmartDashboard::PutNumber("Yaw", m_NavX.GetYaw());
+  frc::SmartDashboard::PutNumber("Pitch", m_NavX.GetPitch());
+  frc::SmartDashboard::PutNumber("CompassHeading", m_NavX.ahrs->GetCompassHeading());
+}
 
 
 // ------------------------ Disabled Mode --------------------
@@ -41,7 +63,7 @@ void Robot::RobotPeriodic() {}
 void Robot::DisabledInit() {
 }
 
-// This function is called every tiem period while robot is in Disabled Mode
+// This function is called every time period while robot is in Disabled Mode
 void Robot::DisabledPeriodic() {
     // run scheduler to operator any commands as required
   frc::Scheduler::GetInstance()->Run();
@@ -94,7 +116,7 @@ void Robot::TeleopInit() {
   m_defaultTeleOp.Start();
 }
 
-// This function is called every tiem period while robot is in TeleOp Mode
+// This function is called every time period while robot is in TeleOp Mode
 void Robot::TeleopPeriodic() {
   // run scheduler to operator any commands as required
   frc::Scheduler::GetInstance()->Run();
@@ -110,6 +132,7 @@ void Robot::TestPeriodic() {
 
 
 // ------------------------ Main Program --------------------
+
 
 // create a robot object
 #ifndef RUNNING_FRC_TESTS

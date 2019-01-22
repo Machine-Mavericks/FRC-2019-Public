@@ -18,18 +18,23 @@
 
 // subsystem definitions
 #include "subsystems/MainDrive.h"
+#include "subsystems/NavX.h"
 
 // command definitions
 #include "commands/TankDrive.h"
 #include "commands/MyAutoCommand.h"
-
+#include "commands/StraightDrive.h"
 
 
 class Robot : public frc::TimedRobot {
   public:
   
+  // create commands
+ //  static StraightDrive m_StraightDrive;
+
   // create subsystems;
   static MainDrive m_MainDrive;
+  static NavX m_NavX;
   
   // create robot driver interfaces
   static DriverOI m_DriverOI;
@@ -58,6 +63,7 @@ class Robot : public frc::TimedRobot {
   private:
   // default teleop mode - as tank drive
   TankDrive m_defaultTeleOp;
+
   
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.

@@ -25,9 +25,9 @@ class MainDrive : public frc::Subsystem {
   // for methods that implement subsystem capabilities
 
   // define drive motors - assign each to specific PWN channel
-  WPI_VictorSPX *m_MotorFrontLeft;
+  WPI_TalonSRX *m_MotorFrontLeft;
   WPI_VictorSPX *m_MotorRearLeft;
-  WPI_VictorSPX *m_MotorFrontRight;
+  WPI_TalonSRX *m_MotorFrontRight;
   WPI_VictorSPX *m_MotorRearRight;
 
   // create overall drive system
@@ -46,7 +46,9 @@ public:
   // =-1.0: full reverse
   // =0.0: full stop
   //=+1.0: full forward
-  void Drive(float LeftSpeed, float RightSpeed);
+  void TankDrive(float LeftSpeed, float RightSpeed);
+
+  void ArcadeDrive(float XSpeed, float ZRotation);
 
   // add other drive commands
   // TBD

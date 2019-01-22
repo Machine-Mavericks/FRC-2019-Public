@@ -7,14 +7,16 @@
 
 #include <frc/WPILib.h>
 #include "DriverOI.h"
+#include "RobotMap.h"
+#include "Robot.h"
 
 // class constructor - executed upon creation of DriverOI object
 // creates joystick operator interfaces
 DriverOI::DriverOI() {
   
     // create drive joystick objects
-    LeftJoystick = new Joystick(0);
-    RightJoystick = new Joystick(1);
+    LeftJoystick = new Joystick(LEFT_JOYSTICK_PORT);
+    RightJoystick = new Joystick(RIGHT_JOYSTICK_PORT);
 
     // Create left drive button objects and associate with left drive joystick and button #
     LeftJoystickButton1 = new JoystickButton(LeftJoystick,1);
@@ -44,4 +46,8 @@ DriverOI::DriverOI() {
  
     // Associate right drive joystick buttons with commands
     // TBD
+
+    // set up straight drive function with joystick trigger
+    RightJoystickButton1->WhenPressed(new StraightDrive());
+
 }

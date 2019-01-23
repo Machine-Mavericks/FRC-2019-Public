@@ -15,6 +15,7 @@
 #include <frc/SpeedControllerGroup.h>
 #include <frc/drive/DifferentialDrive.h>
 #include <ctre/Phoenix.h>
+#include <frc/Encoder.h>
 
 using namespace frc;
 
@@ -25,13 +26,17 @@ class MainDrive : public frc::Subsystem {
   // for methods that implement subsystem capabilities
 
   // define drive motors - assign each to specific PWN channel
-  WPI_TalonSRX *m_MotorFrontLeft;
+  WPI_VictorSPX *m_MotorFrontLeft;
   WPI_VictorSPX *m_MotorRearLeft;
-  WPI_TalonSRX *m_MotorFrontRight;
+  WPI_VictorSPX *m_MotorFrontRight;
   WPI_VictorSPX *m_MotorRearRight;
 
   // create overall drive system
   DifferentialDrive *m_Drive;
+
+  // create encoder objects
+  frc::Encoder *m_EncoderRight;
+  frc::Encoder *m_EncoderLeft;
 
 public:
 
@@ -49,6 +54,14 @@ public:
   void TankDrive(float LeftSpeed, float RightSpeed);
 
   void ArcadeDrive(float XSpeed, float ZRotation);
+
+  float GetLeftEncoderDistance(void);
+
+  float GetRightEncoderDistance(void);
+
+  void ResetLeftEncoder(void);
+
+  void ResetRightEncoder(void);
 
   // add other drive commands
   // TBD

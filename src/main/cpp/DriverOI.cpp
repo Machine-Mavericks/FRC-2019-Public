@@ -9,6 +9,8 @@
 #include "DriverOI.h"
 #include "RobotMap.h"
 #include "Robot.h"
+#include "commands/StraightDrive.h"
+#include "commands/DistanceDrive.h"
 
 // class constructor - executed upon creation of DriverOI object
 // creates joystick operator interfaces
@@ -49,5 +51,6 @@ DriverOI::DriverOI() {
 
     // set up straight drive function with joystick trigger
     RightJoystickButton1->WhenPressed(new StraightDrive());
-
+    LeftJoystickButton1->WhenPressed(new DistanceDrive(72));
+    LeftJoystickButton8->WhenPressed(new DistanceDrive(-72));
 }

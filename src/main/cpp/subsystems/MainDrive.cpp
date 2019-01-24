@@ -9,12 +9,15 @@
 #include "subsystems/MainDrive.h"
 #include "RobotMap.h"
 
+
+constexpr double kPi = 3.14159265358979;
+
 MainDrive::MainDrive() : Subsystem("MainDrive") {
 
   // create individual motor control objects - assign unique CAN address to each motor drive
-  m_MotorFrontLeft = new WPI_TalonSRX(FRONT_LEFT_MOTOR_CANID);
+  m_MotorFrontLeft = new WPI_VictorSPX(FRONT_LEFT_MOTOR_CANID);
   m_MotorRearLeft = new WPI_VictorSPX(REAR_LEFT_MOTOR_CANID);
-  m_MotorFrontRight = new WPI_TalonSRX(FRONT_RIGHT_MOTOR_CANID);
+  m_MotorFrontRight = new WPI_VictorSPX(FRONT_RIGHT_MOTOR_CANID);
   m_MotorRearRight = new WPI_VictorSPX(REAR_RIGHT_MOTOR_CANID);
   
   // configure motor drives with factory default settings
@@ -29,6 +32,19 @@ MainDrive::MainDrive() : Subsystem("MainDrive") {
 
   // create differential drive
   m_Drive = new DifferentialDrive(*m_MotorFrontLeft, *m_MotorFrontRight);
+
+  // create encoder objects
+  m_EncoderRight = new Encoder(2,3);
+  m_EncoderLeft = new Encoder(0,1);
+
+  // Use SetDistancePerPulse to set the multiplier for GetDistance
+  // This is set up assuming a 6 inch wheel with a 360 CPR encoder.
+  m_EncoderRight->SetDistancePerPulse((kPi * 6) / 360.0);
+  m_EncoderLeft->SetDistancePerPulse((kPi * 6) / 360.0);
+
+  // reset encoders
+  ResetLeftEncoder();
+  ResetRightEncoder();
 }
 
   // default command to run with the subsystem
@@ -47,7 +63,7 @@ void MainDrive::TankDrive(float LeftSpeed, float RightSpeed) {
 
   // make a local copy of left and right, so we can check each for range & invert left motor
   float left = -LeftSpeed;
-  float right = RightSpeed;
+  float right = -RightSpeed;
 
   // ensure speeds given to us are between -1.0 and 1.0
   if (left > 1.0)
@@ -92,3 +108,25 @@ void MainDrive::ArcadeDrive(float XSpeed, float ZRotation) {
 
 
 }
+
+
+  float MainDrive::GetLeftEncoderDistance(void){
+    // get left encoder distance since last reset
+    return (-m_EncoderLeft->GetDistance());
+  }
+
+  float MainDrive::GetRightEncoderDistance(void){
+    // get right encoder distance since last reset
+    return m_EncoderRight->GetDistance();
+  }
+
+  void MainDrive::ResetLeftEncoder(void){
+   //reset the left encoder to 0 distance
+    m_EncoderLeft->Reset();
+  }
+
+  void MainDrive::ResetRightEncoder(void){
+    // reset the right encoder to 0 value
+    m_EncoderRight->Reset();
+
+  }

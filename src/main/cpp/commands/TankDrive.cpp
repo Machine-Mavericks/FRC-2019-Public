@@ -30,18 +30,27 @@ void TankDrive::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void TankDrive::Execute() {
   // create variables for left and right joystick y axes
-  float raw_left_y, raw_right_y, left_y, right_y;
+  float raw_left_y, raw_right_y, left_y, right_y, throttle;
 
   // get joystick y values from joystick
-  raw_left_y = Robot::m_DriverOI.LeftJoystick->GetRawAxis(1);
-  raw_right_y = Robot::m_DriverOI.RightJoystick->GetRawAxis(1);
+  raw_left_y = Robot::m_DriverOI.LeftJoystick->GetRawAxis(JOYSTICK_Y_AXIS_ID );
+  raw_right_y = Robot::m_DriverOI.RightJoystick->GetRawAxis(JOYSTICK_Y_AXIS_ID );
 
-  // implement throttle curve
+  // get joystick right throttle to control maximum robot speed
+  // adjust throttle to give value between 0 and +1.0
+  // use negative of throttle so that +1 represents throttle forward position
+  throttle = 0.5 * (1.0 + -Robot::m_DriverOI.RightJoystick->GetRawAxis(JOYSTICK_THROTTLE_AXIS_ID));
+
+  // implement non-linear joystick response curves
   right_y = LINEAR_WEIGHT * raw_right_y + CUBIC_WEIGHT * pow(raw_right_y, 3); 
   left_y = LINEAR_WEIGHT * raw_left_y + CUBIC_WEIGHT * pow(raw_left_y, 3); 
 
+  // apply throttle control (scaling factor) to both left and right values.
+  right_y = right_y * throttle;
+  left_y = left_y * throttle;
+
   // set main drive tank speeds
-  Robot::m_MainDrive.TankDrive (0.5*left_y, 0.5*right_y);
+  Robot::m_MainDrive.TankDrive (left_y, right_y);
 }
 
 // Make this return true when this Command no longer needs to run execute()

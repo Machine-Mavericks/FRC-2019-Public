@@ -7,8 +7,20 @@
 
 #include <frc/WPILib.h>
 #include "DashboardOI.h"
+#include "Robot.h"
 
 // class constructor - executed upon creation of DashboardOI object
-DashboardOI::DashboardOI() {
+DashboardOI::DashboardOI() { }
 
-}
+// Update dashboard
+void DashboardOI::UpdateDashBoard(void)
+{
+    // Show left/right encoder distances 
+    frc::SmartDashboard::PutNumber("Left Encoder", Robot::m_MainDrive.GetLeftEncoderDistance());
+    frc::SmartDashboard::PutNumber("Right Encoder", Robot::m_MainDrive.GetRightEncoderDistance());
+  
+    // Show robot NavX gyro data
+    frc::SmartDashboard::PutNumber("Yaw", Robot::m_NavX.GetYaw());
+    frc::SmartDashboard::PutNumber("Roll", Robot::m_NavX.GetRoll());
+    frc::SmartDashboard::PutNumber("Pitch", Robot::m_NavX.GetPitch());
+ }

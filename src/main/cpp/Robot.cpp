@@ -8,22 +8,19 @@
 #include "Robot.h"
 #include <frc/commands/Scheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Encoder.h>
 #include <frc/Joystick.h>
 #include <frc/PWMVictorSPX.h>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "DashboardOI.h"
 
-constexpr double kPi = 3.14159265358979;
 
 DriverOI Robot::m_DriverOI;
 MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
-//StraightDrive Robot::m_StraightDrive;
-frc::Encoder m_encoder{2,3};
-frc::Encoder m_encoder1{0,1};
+TankDrive Robot::m_defaultTeleOp;
 
 
 // ------------------------ General (All Modes) --------------------
@@ -33,10 +30,6 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  // Use SetDistancePerPulse to set the multiplier for GetDistance
-  // This is set up assuming a 6 inch wheel with a 360 CPR encoder.
-  m_encoder.SetDistancePerPulse((kPi * 6) / 360.0);
-  m_encoder1.SetDistancePerPulse((kPi * 6) / 360.0);
 
 }
 
@@ -46,12 +39,9 @@ void Robot::RobotInit() {
 // <p> This runs after the mode specific periodic functions, but before
 // LiveWindow and SmartDashboard integrated updating. */
 void Robot::RobotPeriodic() {
-  frc::SmartDashboard::PutNumber("Encoder", m_encoder.GetDistance());
-  frc::SmartDashboard::PutNumber("Encoder1", m_encoder1.GetDistance());
-  frc::SmartDashboard::PutNumber("Roll", m_NavX.GetRoll());
-  frc::SmartDashboard::PutNumber("Yaw", m_NavX.GetYaw());
-  frc::SmartDashboard::PutNumber("Pitch", m_NavX.GetPitch());
-  frc::SmartDashboard::PutNumber("CompassHeading", m_NavX.ahrs->GetCompassHeading());
+  
+  // update driver dashboard
+  m_DashboardOI.UpdateDashBoard();
 }
 
 
@@ -128,7 +118,6 @@ void Robot::TeleopPeriodic() {
 // This function is called every tiem period while robot is in Test Mode
 void Robot::TestPeriodic() {
   }
-
 
 
 // ------------------------ Main Program --------------------

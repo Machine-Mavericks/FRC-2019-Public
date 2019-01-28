@@ -17,8 +17,10 @@ Subsystems include MainDrive (incl left/right encoders) and NavX for Gyro monito
 Commands include TankDrive and ArcadeDrive
 Constants now in Robotmap.h
 All driver station updates moved to DriverStation.h
+
 Known issues:
 1) May require fine-tuning of joystick response characteristics which can be done at later date
+
 For next release:
 1) Add functional Limelight camera subsystem
 2) TBD

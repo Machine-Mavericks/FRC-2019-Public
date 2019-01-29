@@ -10,6 +10,8 @@
 #include "RobotMap.h"
 
 
+constexpr double kPi = 3.14159265358979;
+
 MainDrive::MainDrive() : Subsystem("MainDrive") {
 
   // create individual motor control objects - assign unique CAN address to each motor drive
@@ -31,13 +33,14 @@ MainDrive::MainDrive() : Subsystem("MainDrive") {
   // create differential drive
   m_Drive = new DifferentialDrive(*m_MotorFrontLeft, *m_MotorFrontRight);
 
-  // create encoder objects - reverse left encoder so it reads +ve in forward direction
-  m_EncoderRight = new Encoder(RIGHT_ENCODER_CHANNELA_ID,RIGHT_ENCODER_CHANNELB_ID);
-  m_EncoderLeft = new Encoder(LEFT_ENCODER_CHANNELA_ID,LEFT_ENCODER_CHANNELB_ID, true);
+  // create encoder objects
+  m_EncoderRight = new Encoder(2,3);
+  m_EncoderLeft = new Encoder(0,1);
 
   // Use SetDistancePerPulse to set the multiplier for GetDistance
-  m_EncoderRight->SetDistancePerPulse((kPi * WHEEL_DIAMETER) / (float)ENCODER_PULSE_PER_REVOLUTION);
-  m_EncoderLeft->SetDistancePerPulse((kPi * WHEEL_DIAMETER) / (float)ENCODER_PULSE_PER_REVOLUTION);
+  // This is set up assuming a 6 inch wheel with a 360 CPR encoder.
+  m_EncoderRight->SetDistancePerPulse((kPi * 6) / 360.0);
+  m_EncoderLeft->SetDistancePerPulse((kPi * 6) / 360.0);
 
   // reset encoders
   ResetLeftEncoder();
@@ -74,46 +77,20 @@ void MainDrive::TankDrive(float LeftSpeed, float RightSpeed) {
     right = -1.0;
 
   // command drive to tankdrive at specified speeds
+  //m_MotorFrontLeft->Set(ControlMode::PercentOutput, left);
+  //m_MotorFrontRight->Set(ControlMode::PercentOutput, right);
   m_Drive->TankDrive(left, right);
+  m_MotorFrontRight->GetSelectedSensorPosition();
+  m_MotorFrontLeft->GetSelectedSensorPosition();
+
+
 }
 
-// Drive robot in Arcade Drive (Constant arc speed around z axis)
-// Inputs: XSpeed, ZSpeed - -1 <=speed <= +1.
-// -1: full reverse
-// 0: full stop 
-// +1: full forward
-void MainDrive::ArcadeDrive(float XSpeed, float ZSpeed, bool Quickturn)
-{
+void MainDrive::ArcadeDrive(float XSpeed, float ZRotation) {
 
-  // make a local copy of parameters so we can check each for range & invert left motor
-  float speed = -XSpeed;
-  float rotation = ZSpeed;
-
-  // ensure speeds given to us are between -1.0 and 1.0
-  if (speed > 1.0)
-    speed = 1.0;
-  if (speed < -1.0)
-    speed = -1.0;
-
-  if (rotation > 1.0)
-    rotation = 1.0;
-  if (rotation < -1.0)
-    rotation = -1.0;
-
-  // drive motors at desired speed and rotation
-  m_Drive->ArcadeDrive(speed, rotation, Quickturn);
-}
-
-// Drive robot in Curvature Drive (Constant rotational speed around z axis)
-// Inputs: XSpeed, ZSpeed - -1 <=speed <= +1.
-// -1: full reverse
-// 0: full stop 
-// +1: full forward
-void MainDrive::CurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn)
-{
   // make a local copy of left and right, so we can check each for range & invert left motor
-  float speed = -XSpeed;
-  float rotation = ZSpeed;
+  float speed = XSpeed;
+  float rotation = ZRotation;
 
   // ensure speeds given to us are between -1.0 and 1.0
   if (speed > 1.0)
@@ -126,34 +103,30 @@ void MainDrive::CurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn)
   if (rotation < -1.0)
     rotation = -1.0;
 
-  // drive motors at desired speed and rotation
-  m_Drive->CurvatureDrive(speed, rotation, Quickturn);
+ m_Drive->ArcadeDrive(speed, rotation);
+//m_Drive->CurvatureDrive(speed, rotation, true);
+
+
 }
 
-// ------------- Drive Encoder Functions -------------
 
-// reset the left encoder to 0 distance
-void MainDrive::ResetLeftEncoder(void)
-{
-  m_EncoderLeft->Reset();
-}
+  float MainDrive::GetLeftEncoderDistance(void){
+    // get left encoder distance since last reset
+    return (-m_EncoderLeft->GetDistance());
+  }
 
-// reset the right encoder to 0 value
-void MainDrive::ResetRightEncoder(void)
-{
-   m_EncoderRight->Reset();
-}
+  float MainDrive::GetRightEncoderDistance(void){
+    // get right encoder distance since last reset
+    return m_EncoderRight->GetDistance();
+  }
 
-// get left encoder distance since last reset
-float MainDrive::GetLeftEncoderDistance(void)
-{
-  return m_EncoderLeft->GetDistance();
-}
+  void MainDrive::ResetLeftEncoder(void){
+   //reset the left encoder to 0 distance
+    m_EncoderLeft->Reset();
+  }
 
-// get right encoder distance since last reset
-float MainDrive::GetRightEncoderDistance(void)
-{
-  return m_EncoderRight->GetDistance();
-}
+  void MainDrive::ResetRightEncoder(void){
+    // reset the right encoder to 0 value
+    m_EncoderRight->Reset();
 
-  
+  }

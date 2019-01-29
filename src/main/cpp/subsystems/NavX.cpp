@@ -9,7 +9,7 @@
 #include "subsystems/NavX.h"
 #include "RobotMap.h"
 
-// constructor - used to initialize specific hardware
+ // constructor - used to initialize specific hardware
 NavX::NavX() : Subsystem("Navx") {
 
     // create navX object and set to use SPI port
@@ -22,22 +22,22 @@ NavX::NavX() : Subsystem("Navx") {
     ZeroYaw();
 }
 
-// default command to run with the subsystem
+  // default command to run with the subsystem
 void NavX::InitDefaultCommand() {
   // For drive there is no default command
 }
 
 // zero the yaw
-void NavX::ZeroYaw(void){
-    //zero the gyro
-    ahrs->ZeroYaw();
-}
+  void NavX::ZeroYaw(void){
+      //zero the gyro
+      ahrs->ZeroYaw();
+  }
 
-// get current yaw
-// returns the current yaw value (in degrees, from -180 to 180) reported by the sensor.
-float NavX::GetYaw(void){
-    return (ahrs->GetYaw());
-}
+  // get current yaw
+  // returns the current yaw value (in degrees, from -180 to 180) reported by the sensor.
+  float NavX::GetYaw(void){
+      return (ahrs->GetYaw());
+  }
 
 // returns the current roll value (in degrees, from -180 to 180) reported by the sensor.
 float NavX::GetRoll(void){

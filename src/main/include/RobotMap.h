@@ -8,41 +8,47 @@
 #pragma once
 
 // Motor Drive CANbus node IDs
-#define FRONT_LEFT_MOTOR_CANID          2
-#define FRONT_RIGHT_MOTOR_CANID         3
-#define REAR_LEFT_MOTOR_CANID           5
-#define REAR_RIGHT_MOTOR_CANID          4
+#define FRONT_LEFT_MOTOR_CANID    2
+#define FRONT_RIGHT_MOTOR_CANID  3
+#define REAR_LEFT_MOTOR_CANID    5
+#define REAR_RIGHT_MOTOR_CANID  4
 
 // Joystick port Ids
-#define LEFT_JOYSTICK_PORT              0
-#define RIGHT_JOYSTICK_PORT             1
-#define MECHANISM_CONTROLLER_PORT       2
+#define RIGHT_JOYSTICK_PORT 1
+#define LEFT_JOYSTICK_PORT 0
+#define MECHANISM_CONTROLLER_PORT 2
 
-// Joystick Axis IDs
-#define JOYSTICK_X_AXIS_ID              0
-#define JOYSTICK_Y_AXIS_ID              1
-#define JOYSTICK_THROTTLE_AXIS_ID       3
+// Wrist PID gains
+#define WRIST_P_GAIN 1.0
+#define WRIST_I_GAIN 0.0
+#define WRIST_D_Gain 0.0
 
-// Encoder Channel IDs - defines RoboRio I/O # for each encoder channel 
-#define RIGHT_ENCODER_CHANNELA_ID       2       
-#define RIGHT_ENCODER_CHANNELB_ID       3
-#define LEFT_ENCODER_CHANNELA_ID        0
-#define LEFT_ENCODER_CHANNELB_ID        1
+// Throttle Curve Coefficients
+#define LINEAR_WEIGHT 0.8           // value between 0 and 1
+#define CUBIC_WEIGHT (1.0 - LINEAR_WEIGHT) // automatically calculated to ensure equivalence to 1
 
-// Throttle Curve Coefficients - used for tank and arcade drive modes
-#define LINEAR_WEIGHT                   0.5                     // value between 0 and 1
-#define CUBIC_WEIGHT                    (1.0 - LINEAR_WEIGHT)   // automatically calculated to ensure equivalence to 1
+// Distance drive distance
+#define DISTANCE_TO_DRIVE 72
+#define NEGATIVE_DISTANCE_TO_DRIVE -72
 
-// Robot wheel diameter (in inches) - used to determine travel distance
-#define WHEEL_DIAMETER                  6.0      
+// Turn to angle
+#define ANGLE_TO_TURN 90
+#define STEERING 0.2
+#define SPEED 0.15
 
-// Robot encocer resolution (pulse counts per revolution)
-#define ENCODER_PULSE_PER_REVOLUTION    360.0
+/**
+ * The RobotMap is a mapping from the ports sensors and actuators are wired into
+ * to a variable name. This provides flexibility changing wiring, makes checking
+ * the wiring easier and significantly reduces the number of magic numbers
+ * floating around.
+ */
 
+// For example to map the left and right motors, you could define the
+// following variables to use with your drivetrain subsystem.
+// constexpr int kLeftMotor = 1;
+// constexpr int kRightMotor = 2;
 
-
-// Other constants
-constexpr double kPi = 3.14159265358979;
-
-
-
+// If you are using multiple modules, make sure to define both the port
+// number and the module. For example you with a rangefinder:
+// constexpr int kRangeFinderPort = 1;
+// constexpr int kRangeFinderModule = 1;

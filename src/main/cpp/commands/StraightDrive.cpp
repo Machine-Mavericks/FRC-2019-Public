@@ -5,15 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// Tank drive command allows robot to be driven in tank mode.
-// This is the default command when robot in teleop mode
-
-#include "commands/TankDrive.h"
+#include "commands/StraightDrive.h"
 #include "Robot.h"
 #include <math.h>
 #include "RobotMap.h"
+#include "DriverOI.h"
+#include "subsystems/NavX.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
-TankDrive::TankDrive() {
+
+
+StraightDrive::StraightDrive() {
+  // Use Requires() here to declare subsystem dependencies
+  // eg. Requires(Robot::chassis.get());
+}
+
+// Called just before this Command runs the first time
+void StraightDrive::Initialize() {
 
   // Use Requires() here to declare subsystem dependencies
   Requires (&Robot::m_MainDrive);
@@ -23,42 +31,45 @@ TankDrive::TankDrive() {
 
   // command is not to run when robot is disabled
   SetRunWhenDisabled(false);
+  //zero the gyro
+  Robot::m_NavX.ZeroYaw();
 
 }
 
-// Called just before this Command runs the first time
-void TankDrive::Initialize() {}
-
 // Called repeatedly when this Command is scheduled to run
-void TankDrive::Execute() {
+void StraightDrive::Execute() {
 
   // create variables for left and right joystick y axes
-  float raw_left_y, raw_right_y, left_y, right_y;
+  float raw_right_y, right_y;
+  float CurrentYaw = Robot::m_NavX.GetYaw();
 
   // get joystick y values from joystick
-  raw_left_y = Robot::m_DriverOI.LeftJoystick->GetRawAxis(1);
   raw_right_y = Robot::m_DriverOI.RightJoystick->GetRawAxis(1);
 
   // implement throttle curve
-  right_y = LINEAR_WEIGHT * raw_right_y + CUBIC_WEIGHT * pow(raw_right_y, 3); 
-  left_y = LINEAR_WEIGHT * raw_left_y + CUBIC_WEIGHT * pow(raw_left_y, 3); 
+  right_y = raw_right_y; 
 
   // set main drive tank speeds
-  Robot::m_MainDrive.TankDrive (left_y, right_y);
+  Robot::m_MainDrive.ArcadeDrive (0.5*right_y,-0.04 *CurrentYaw);
 
 }
 
 // Make this return true when this Command no longer needs to run execute()
-bool TankDrive::IsFinished() {
+bool StraightDrive::IsFinished() { 
   
-  // since this is default mode, always return false - command never ends
-  return false;
+  if (TimeSinceInitialized() > 10.0)
+    {
+      frc::SmartDashboard::PutNumber("Finished", 1);
+       return true;
+    }
+    else
+      return false; 
 
 }
 
 // Called once after isFinished returns true
-void TankDrive::End() {}
+void StraightDrive::End() {}
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
-void TankDrive::Interrupted() {}
+void StraightDrive::Interrupted() {}

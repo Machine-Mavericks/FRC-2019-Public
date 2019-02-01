@@ -7,28 +7,35 @@
 
 #include <frc/WPILib.h>
 #include "DashboardOI.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 #include "Robot.h"
-#include "subsystems/Limelight.h"
-
 
 // class constructor - executed upon creation of DashboardOI object
-DashboardOI::DashboardOI() {
+DashboardOI::DashboardOI() { }
 
-  // Encoders
-  frc::SmartDashboard::PutNumber("Left Encoder", Robot::m_MainDrive.GetLeftEncoderDistance());
-  frc::SmartDashboard::PutNumber("Right Encoder", Robot::m_MainDrive.GetRightEncoderDistance());
+// Update dashboard
+void DashboardOI::UpdateDashBoard(void)
+{
+    // Show left/right encoder distances 
+    frc::SmartDashboard::PutNumber("Left Encoder", Robot::m_MainDrive.GetLeftEncoderDistance());
+    frc::SmartDashboard::PutNumber("Right Encoder", Robot::m_MainDrive.GetRightEncoderDistance());
+  
+    // Show robot NavX gyro data
+    frc::SmartDashboard::PutNumber("Yaw", Robot::m_NavX.GetYaw());
+    frc::SmartDashboard::PutNumber("Roll", Robot::m_NavX.GetRoll());
+    frc::SmartDashboard::PutNumber("Pitch", Robot::m_NavX.GetPitch());
+  
+    // Show limelight table values
+    frc::SmartDashboard::PutNumber("Target Present?", Robot::m_Limelight.IsTargetPresent());
+    frc::SmartDashboard::PutNumber("Horizontal Target Offset Angle", Robot::m_Limelight.GetHorizontalTargetOffsetAngle());
+  frc::SmartDashboard::PutNumber("Vertical Target Offset Angle", Robot::m_Limelight.GetVerticalTargetOffsetAngle());
+  frc::SmartDashboard::PutNumber("Target Area", Robot::m_Limelight.GetTargetArea());
+  frc::SmartDashboard::PutNumber("Target Skew", Robot::m_Limelight.GetTargetSkew());
 
-  // NavX
-  frc::SmartDashboard::PutNumber("Roll", Robot::m_NavX.GetRoll());
-  frc::SmartDashboard::PutNumber("Yaw", Robot::m_NavX.GetYaw());
-  frc::SmartDashboard::PutNumber("Pitch", Robot::m_NavX.GetPitch());
-  frc::SmartDashboard::PutNumber("CompassHeading", Robot::m_NavX.ahrs->GetCompassHeading());
+  frc::SmartDashboard::PutNumber("Latency", Robot::m_Limelight.GetLatencyContribution());
+  frc::SmartDashboard::PutNumber("Shortest Side", Robot::m_Limelight.GetShortestSide());
+  frc::SmartDashboard::PutNumber("Longest Side", Robot::m_Limelight.GetLongestSide());
+  frc::SmartDashboard::PutNumber("Horizontal Side", Robot::m_Limelight.GetHorizontalSideLength());
+  frc::SmartDashboard::PutNumber("Vertical Side", Robot::m_Limelight.GetVerticalSideLength());
+  frc::SmartDashboard::PutNumber("Pipeline", Robot::m_Limelight.GetPipeline());
 
-  // Limelight
-  //frc::SmartDashboard::PutNumber("Horizontal Target Offset Angle", Robot::m_Limelight.GetHorizontalTargetOffsetAngle());
-  //frc::SmartDashboard::PutNumber("Vertical Target Offset Angle", Robot::m_Limelight.GetVerticalTargetOffsetAngle());
-  //frc::SmartDashboard::PutNumber("Target Area", Robot::m_Limelight.GetTargetArea());
-  //frc::SmartDashboard::PutNumber("Target Skew", Robot::m_Limelight.GetTargetSkew());
-
-}
+ }

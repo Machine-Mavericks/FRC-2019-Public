@@ -9,9 +9,9 @@
 #include "DriverOI.h"
 #include "RobotMap.h"
 #include "Robot.h"
-#include "commands/StraightDrive.h"
-#include "commands/DistanceDrive.h"
+#include "commands/ArcadeDrive.h"
 #include "commands/TurnToAngle.h"
+
 
 // class constructor - executed upon creation of DriverOI object
 // creates joystick operator interfaces
@@ -41,18 +41,13 @@ DriverOI::DriverOI() {
     RightJoystickButton7 = new JoystickButton(RightJoystick,7);
     RightJoystickButton8 = new JoystickButton(RightJoystick,8);
 
-    // Associate left drive joystick buttons with commands
-    // TBD
-    // For example:
-    // RightJoystickButton1->WhenPressed (new 'insert command to do here');
-    // RightJoystickButton1->WhenPressed (new OpenClaw());
- 
-    // Associate right drive joystick buttons with commands
-    // TBD
+    // -------------Button-Initiated Commands -------------
+    
+    // set robot arcade mode drive to function while right joystick trigger is pressed
+    RightJoystickButton1->WhileHeld(new ArcadeDrive());
+    LeftJoystickButton1->WhileHeld(new TurnToAngle(0,0,0));
 
-    // set up straight drive function with joystick trigger
-    RightJoystickButton1->WhenPressed(new StraightDrive());
-    LeftJoystickButton1->WhenPressed(new DistanceDrive(DISTANCE_TO_DRIVE));
-    LeftJoystickButton8->WhenPressed(new DistanceDrive(NEGATIVE_DISTANCE_TO_DRIVE));
-    RightJoystickButton8->WhenPressed(new TurnToAngle(ANGLE_TO_TURN, STEERING, SPEED));
+
+
 }
+ 

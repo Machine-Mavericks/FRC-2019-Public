@@ -16,11 +16,7 @@
 using namespace frc;
 
 class NavX : public frc::Subsystem {
- private:
-
-
-
-public:
+  public:
 
   // constructor - used to initialize specific hardware
   NavX();
@@ -40,6 +36,9 @@ public:
   // get pitch
   float GetPitch(void);
 
+
+  private:
+  
   // create pointer to NavX object
   AHRS *ahrs;
 };

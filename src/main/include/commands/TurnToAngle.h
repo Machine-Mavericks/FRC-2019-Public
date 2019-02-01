@@ -18,7 +18,7 @@ class TurnToAngle : public frc::Command {
   void End() override;
   void Interrupted() override;
 
-  float m_AngleToTurn = 0;
+  float m_TargetAngle = 0;
   float m_Speed = 0;
   float m_Steering = 0;
 };

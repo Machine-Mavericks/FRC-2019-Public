@@ -7,10 +7,12 @@
 
 #include "Robot.h"
 #include <frc/commands/Scheduler.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Joystick.h>
 #include <frc/PWMVictorSPX.h>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "DashboardOI.h"
 
 
 
@@ -19,17 +21,14 @@ MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
-//Limelight Robot::m_Limelight;
-
-//StraightDrive Robot::m_StraightDrive;
-
+TankDrive Robot::m_defaultTeleOp;
+Limelight Robot::m_Limelight;
 
 
 // ------------------------ General (All Modes) --------------------
 
 // Function is called when the robot object is first created
 void Robot::RobotInit() {
-  
   m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -42,7 +41,9 @@ void Robot::RobotInit() {
 // <p> This runs after the mode specific periodic functions, but before
 // LiveWindow and SmartDashboard integrated updating. */
 void Robot::RobotPeriodic() {
-  //frc::SmartDashboard::PutNumber("Horizontal Target Offset Angle", Robot::m_Limelight.GetHorizontalTargetOffsetAngle());
+  
+  // update driver dashboard
+  m_DashboardOI.UpdateDashBoard();
 }
 
 
@@ -119,7 +120,6 @@ void Robot::TeleopPeriodic() {
 // This function is called every tiem period while robot is in Test Mode
 void Robot::TestPeriodic() {
   }
-
 
 
 // ------------------------ Main Program --------------------

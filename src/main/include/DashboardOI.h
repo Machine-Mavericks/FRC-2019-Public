@@ -12,10 +12,11 @@
 //using namespace frc;
 
 class DashboardOI {
-
     public:
     
     // class constructor - executed upon creation of DashboardOI object
     DashboardOI();
 
+    // Update dashboard
+    void UpdateDashBoard(void);
 };

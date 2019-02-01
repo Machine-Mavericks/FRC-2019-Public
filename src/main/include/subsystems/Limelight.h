@@ -16,10 +16,6 @@
 class Limelight : public frc::Subsystem {
  private:
 
-  double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-  double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
-  double targetArea = table->GetNumber("ta",0.0);
-  double targetSkew = table->GetNumber("ts",0.0);
 
   // It's desirable that everything possible under private except
   // for methods that implement subsystem capabilities
@@ -32,6 +28,13 @@ class Limelight : public frc::Subsystem {
   double GetVerticalTargetOffsetAngle();
   double GetTargetArea();
   double GetTargetSkew();
+  bool IsTargetPresent();
+  double GetLatencyContribution();
+  int GetShortestSide();
+  int GetLongestSide();
+  int GetHorizontalSideLength();
+  int GetVerticalSideLength();
+  int GetPipeline();
 
   //create pointer to Limelight object
   std::shared_ptr<NetworkTable> table;

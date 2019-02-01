@@ -47,23 +47,25 @@ public:
   void InitDefaultCommand() override;
 
   // Drive in Tank Drive - where left and right motors are driven independently
-  // Inputs: LeftSpeed, RightSpeed
-  // =-1.0: full reverse
-  // =0.0: full stop
-  //=+1.0: full forward
   void TankDrive(float LeftSpeed, float RightSpeed);
 
-  void ArcadeDrive(float XSpeed, float ZRotation);
+  // Drive robot in Arcade Drive (Constant arc speed around z axis)
+  void ArcadeDrive(float XSpeed, float ZRotation, bool Quickturn);
 
-  float GetLeftEncoderDistance(void);
+  // Drive robot in Curvature Drive (Constant rotational speed around z axis)
+  void CurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn);
+ 
 
-  float GetRightEncoderDistance(void);
+  // ------------- Drive Encoder Functions -------------
 
+
+
+  // reset the left /right encoders
   void ResetLeftEncoder(void);
-
   void ResetRightEncoder(void);
 
-  // add other drive commands
-  // TBD
+  // get left/right encoder distance since last reset
+  float GetLeftEncoderDistance(void); 
+  float GetRightEncoderDistance(void);
 
 };

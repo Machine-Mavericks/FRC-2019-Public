@@ -24,7 +24,6 @@
 // command definitions
 #include "commands/TankDrive.h"
 #include "commands/MyAutoCommand.h"
-#include "commands/StraightDrive.h"
 
 
 class Robot : public frc::TimedRobot {
@@ -36,12 +35,15 @@ class Robot : public frc::TimedRobot {
   // create subsystems;
   static MainDrive m_MainDrive;
   static NavX m_NavX;
-  //static Limelight m_Limelight;
+  static Limelight m_Limelight;
   
   // create robot driver interfaces
   static DriverOI m_DriverOI;
   static MechanismOI m_MechanismOI;
   static DashboardOI m_DashboardOI;
+
+  // default teleop mode - as tank drive
+  static TankDrive m_defaultTeleOp;
 
   // Robot mode-independent funtcions
   void RobotInit() override;
@@ -63,9 +65,6 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
   private:
-  // default teleop mode - as tank drive
-  TankDrive m_defaultTeleOp;
-
   
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.

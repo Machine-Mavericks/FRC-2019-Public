@@ -39,10 +39,39 @@
 // Robot encocer resolution (pulse counts per revolution)
 #define ENCODER_PULSE_PER_REVOLUTION    360.0
 
-
-
 // Other constants
 constexpr double kPi = 3.14159265358979;
+
+// ------------- Elevator Constants -------------
+
+
+// Motor Drive CANbus node IDs
+#define ELEVATOR_MOTOR_CANID            6
+
+// Motor encoder counts per revolution
+// TalonSRX uses 4x count mode - encocer normally has 1024 pulses per revolution
+#define ELEVATOR_ENCODER_PULSE_PER_REVOLUTION   4096
+
+// Elevator position control error gains
+#define ELEVATOR_PGAIN                  0.5
+#define ELEVATOR_IGAIN                  0.001     // I gain should be used very sparingly. 
+#define ELEVATOR_DGAIN                  0.0     // I suggest derivative gain not be used. Using this will make tuning for stability more difficult
+
+
+// Elevator soft (software) limits - in # of encoder pulses
+// MiN would normally be 0 for elevator, corresponding to lowest position (home position)
+#define ELEVATOR_SOFT_LIMIT_MIN         0  
+#define ELEVATOR_SOFT_LIMIT_MAX         20000 //4095
+         
+// Elevator defined positions - in # of encoder pulses
+#define ELEVATOR_POSITION0              0
+#define ELEVATOR_POSITION1              4000 //820
+#define ELEVATOR_POSITION2              8000 // 1640
+#define ELEVATOR_POSITION3              12000 //2460
+#define ELEVATOR_POSITION4              16000 //3280
+
+// Elevator positional tolerance. Elevator reports position if within +/- tolerance of fixed position
+#define ELEVATOR_POSITION_TOLERANCE     100
 
 
 

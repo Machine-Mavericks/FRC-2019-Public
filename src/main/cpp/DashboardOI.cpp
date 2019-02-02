@@ -23,4 +23,7 @@ void DashboardOI::UpdateDashBoard(void)
     frc::SmartDashboard::PutNumber("Yaw", Robot::m_NavX.GetYaw());
     frc::SmartDashboard::PutNumber("Roll", Robot::m_NavX.GetRoll());
     frc::SmartDashboard::PutNumber("Pitch", Robot::m_NavX.GetPitch());
+    frc::SmartDashboard::PutNumber("ElevatorTargetPosition", Robot::m_Elevator.GetElevatorTargetPosition());
+    frc::SmartDashboard::PutBoolean("ElevatorAtTarget?", Robot::m_Elevator.IsElevatorAtTarget());
+       
  }

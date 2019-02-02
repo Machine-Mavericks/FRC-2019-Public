@@ -8,6 +8,8 @@
 #include <frc/WPILib.h>
 #include "MechanismOI.h"
 #include "RobotMap.h"
+#include "commands/ElevatorChangePosition.h"
+
 // class constructor - executed upon creation of MechanismOI object
 // creates joystick operator interfaces
 MechanismOI::MechanismOI() {
@@ -27,6 +29,11 @@ MechanismOI::MechanismOI() {
     
     // associate operator joystick buttons with commands
     // TBD
+
+
+    // move elevator to target position
+    MechanismJoystickButton1->WhenPressed(new ElevatorChangePosition(false));
+    MechanismJoystickButton4->WhenPressed(new ElevatorChangePosition(true));
 
 }
   

@@ -20,7 +20,9 @@ MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
+Elevator Robot::m_Elevator;
 TankDrive Robot::m_defaultTeleOp;
+//ElevatorManualControl Robot::m_ElevatorControl;
 
 
 // ------------------------ General (All Modes) --------------------
@@ -104,6 +106,7 @@ void Robot::TeleopInit() {
 
   // run teleop command - run robot tank drive
   m_defaultTeleOp.Start();
+ // m_ElevatorControl.Start();
 }
 
 // This function is called every time period while robot is in TeleOp Mode

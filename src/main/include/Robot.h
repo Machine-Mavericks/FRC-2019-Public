@@ -19,10 +19,12 @@
 // subsystem definitions
 #include "subsystems/MainDrive.h"
 #include "subsystems/NavX.h"
+#include "subsystems/Elevator.h"
 
 // command definitions
 #include "commands/TankDrive.h"
 #include "commands/MyAutoCommand.h"
+//#include "commands/ElevatorManualControl.h"
 
 
 class Robot : public frc::TimedRobot {
@@ -34,6 +36,7 @@ class Robot : public frc::TimedRobot {
   // create subsystems;
   static MainDrive m_MainDrive;
   static NavX m_NavX;
+  static Elevator m_Elevator;
   
   // create robot driver interfaces
   static DriverOI m_DriverOI;
@@ -42,6 +45,7 @@ class Robot : public frc::TimedRobot {
 
   // default teleop mode - as tank drive
   static TankDrive m_defaultTeleOp;
+  //static ElevatorManualControl m_ElevatorControl;
 
   // Robot mode-independent funtcions
   void RobotInit() override;

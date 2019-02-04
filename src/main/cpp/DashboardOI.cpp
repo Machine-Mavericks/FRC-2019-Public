@@ -23,4 +23,21 @@ void DashboardOI::UpdateDashBoard(void)
     frc::SmartDashboard::PutNumber("Yaw", Robot::m_NavX.GetYaw());
     frc::SmartDashboard::PutNumber("Roll", Robot::m_NavX.GetRoll());
     frc::SmartDashboard::PutNumber("Pitch", Robot::m_NavX.GetPitch());
+    frc::SmartDashboard::PutNumber("ElevatorTargetPosition", Robot::m_Elevator.GetElevatorTargetPosition());
+    frc::SmartDashboard::PutBoolean("ElevatorAtTarget?", Robot::m_Elevator.IsElevatorAtTarget());
+    
+    // Show Limelight data
+    frc::SmartDashboard::PutNumber("Target Present?", Robot::m_Limelight.IsTargetPresent());
+    frc::SmartDashboard::PutNumber("Horizontal Target Offset Angle", Robot::m_Limelight.GetHorizontalTargetOffsetAngle());
+    frc::SmartDashboard::PutNumber("Vertical Target Offset Angle", Robot::m_Limelight.GetVerticalTargetOffsetAngle());
+    frc::SmartDashboard::PutNumber("Target Area", Robot::m_Limelight.GetTargetArea());
+    frc::SmartDashboard::PutNumber("Target Skew", Robot::m_Limelight.GetTargetSkew());
+
+    frc::SmartDashboard::PutNumber("Latency", Robot::m_Limelight.GetLatencyContribution());
+    frc::SmartDashboard::PutNumber("Shortest Side", Robot::m_Limelight.GetShortestSide());
+    frc::SmartDashboard::PutNumber("Longest Side", Robot::m_Limelight.GetLongestSide());
+    frc::SmartDashboard::PutNumber("Horizontal Side", Robot::m_Limelight.GetHorizontalSideLength());
+    frc::SmartDashboard::PutNumber("Vertical Side", Robot::m_Limelight.GetVerticalSideLength());
+    frc::SmartDashboard::PutNumber("Pipeline", Robot::m_Limelight.GetPipeline());
+
  }

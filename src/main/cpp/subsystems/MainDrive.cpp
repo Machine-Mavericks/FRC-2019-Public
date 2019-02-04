@@ -5,24 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-
 #include "subsystems/MainDrive.h"
 #include "RobotMap.h"
+#include "commands/TankDrive.h"
 
-
-MainDrive::MainDrive() : Subsystem("MainDrive") {
+MainDrive::MainDrive() : Subsystem("MainDrive")
+{
 
   // create individual motor control objects - assign unique CAN address to each motor drive
   m_MotorFrontLeft = new WPI_VictorSPX(FRONT_LEFT_MOTOR_CANID);
   m_MotorRearLeft = new WPI_VictorSPX(REAR_LEFT_MOTOR_CANID);
   m_MotorFrontRight = new WPI_VictorSPX(FRONT_RIGHT_MOTOR_CANID);
   m_MotorRearRight = new WPI_VictorSPX(REAR_RIGHT_MOTOR_CANID);
-  
+
   // configure motor drives with factory default settings
   m_MotorFrontLeft->ConfigFactoryDefault();
   m_MotorRearLeft->ConfigFactoryDefault();
   m_MotorFrontRight->ConfigFactoryDefault();
   m_MotorRearRight->ConfigFactoryDefault();
+
+  
 
   // set rear drives to follow front ones
   m_MotorRearLeft->Follow(*m_MotorFrontLeft);
@@ -32,8 +34,8 @@ MainDrive::MainDrive() : Subsystem("MainDrive") {
   m_Drive = new DifferentialDrive(*m_MotorFrontLeft, *m_MotorFrontRight);
 
   // create encoder objects - reverse left encoder so it reads +ve in forward direction
-  m_EncoderRight = new Encoder(RIGHT_ENCODER_CHANNELA_ID,RIGHT_ENCODER_CHANNELB_ID);
-  m_EncoderLeft = new Encoder(LEFT_ENCODER_CHANNELA_ID,LEFT_ENCODER_CHANNELB_ID, true);
+  m_EncoderRight = new Encoder(RIGHT_ENCODER_CHANNELA_ID, RIGHT_ENCODER_CHANNELB_ID);
+  m_EncoderLeft = new Encoder(LEFT_ENCODER_CHANNELA_ID, LEFT_ENCODER_CHANNELB_ID, true);
 
   // Use SetDistancePerPulse to set the multiplier for GetDistance
   m_EncoderRight->SetDistancePerPulse((kPi * WHEEL_DIAMETER) / (float)ENCODER_PULSE_PER_REVOLUTION);
@@ -44,20 +46,21 @@ MainDrive::MainDrive() : Subsystem("MainDrive") {
   ResetRightEncoder();
 }
 
-  // default command to run with the subsystem
-void MainDrive::InitDefaultCommand() {
-  // For drive there is no default command
+// default command to run with the subsystem
+void MainDrive::InitDefaultCommand()
+{
+  // Set default command for main drive to tank mode
+  SetDefaultCommand(new TankDrive());
 }
-
 
 // Drive in Tank Drive - where left and right motors are driven independently
 // Inputs: LeftSpeed, RightSpeed - -1 <=speed <= +1.
 // -1: full reverse
-// 0: full stop 
+// 0: full stop
 // +1: full forward
 // Left motor is inverted
-void MainDrive::TankDrive(float LeftSpeed, float RightSpeed) {
-
+void MainDrive::SetTankDrive(float LeftSpeed, float RightSpeed)
+{
   // make a local copy of left and right, so we can check each for range & invert left motor
   float left = -LeftSpeed;
   float right = -RightSpeed;
@@ -80,9 +83,9 @@ void MainDrive::TankDrive(float LeftSpeed, float RightSpeed) {
 // Drive robot in Arcade Drive (Constant arc speed around z axis)
 // Inputs: XSpeed, ZSpeed - -1 <=speed <= +1.
 // -1: full reverse
-// 0: full stop 
+// 0: full stop
 // +1: full forward
-void MainDrive::ArcadeDrive(float XSpeed, float ZSpeed, bool Quickturn)
+void MainDrive::SetArcadeDrive(float XSpeed, float ZSpeed, bool Quickturn)
 {
 
   // make a local copy of parameters so we can check each for range & invert left motor
@@ -107,9 +110,9 @@ void MainDrive::ArcadeDrive(float XSpeed, float ZSpeed, bool Quickturn)
 // Drive robot in Curvature Drive (Constant rotational speed around z axis)
 // Inputs: XSpeed, ZSpeed - -1 <=speed <= +1.
 // -1: full reverse
-// 0: full stop 
+// 0: full stop
 // +1: full forward
-void MainDrive::CurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn)
+void MainDrive::SetCurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn)
 {
   // make a local copy of left and right, so we can check each for range & invert left motor
   float speed = -XSpeed;
@@ -141,7 +144,7 @@ void MainDrive::ResetLeftEncoder(void)
 // reset the right encoder to 0 value
 void MainDrive::ResetRightEncoder(void)
 {
-   m_EncoderRight->Reset();
+  m_EncoderRight->Reset();
 }
 
 // get left encoder distance since last reset
@@ -155,5 +158,3 @@ float MainDrive::GetRightEncoderDistance(void)
 {
   return m_EncoderRight->GetDistance();
 }
-
-  

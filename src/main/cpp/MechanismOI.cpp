@@ -8,6 +8,14 @@
 #include <frc/WPILib.h>
 #include "MechanismOI.h"
 #include "RobotMap.h"
+#include "commands/ElevatorUpDownPosition.h"
+#include "commands/Open.h"
+#include "commands/GrabHatch.h"
+#include "commands/GrabBall.h"
+#include "commands/TiltUp.h"
+#include "commands/TiltDown.h"
+#include "commands/TiltMid.h"
+
 // class constructor - executed upon creation of MechanismOI object
 // creates joystick operator interfaces
 MechanismOI::MechanismOI() {
@@ -24,9 +32,20 @@ MechanismOI::MechanismOI() {
     MechanismJoystickButton6 = new JoystickButton(MechanismJoystick,6);
     MechanismJoystickButton7 = new JoystickButton(MechanismJoystick,7);
     MechanismJoystickButton8 = new JoystickButton(MechanismJoystick,8);
+
+    // move elevator up or down one position
+    MechanismJoystickButton1->WhenPressed(new ElevatorUpDownPosition(false));
+    MechanismJoystickButton4->WhenPressed(new ElevatorUpDownPosition(true));
     
-    // associate operator joystick buttons with commands
-    // TBD
+    // open and close claw
+    MechanismJoystickButton3->WhenPressed(new GrabBall());
+    MechanismJoystickButton2->WhenPressed(new Open());
+    MechanismJoystickButton6->WhenPressed(new GrabHatch());
+
+    // tilt claw
+    MechanismJoystickButton5->WhenPressed(new TiltMid());
+    MechanismJoystickButton7->WhenPressed(new TiltDown());
+    MechanismJoystickButton8->WhenPressed(new TiltUp());
 
 }
   

@@ -20,14 +20,19 @@ MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
-TankDrive Robot::m_defaultTeleOp;
+Elevator Robot::m_Elevator;
+Limelight Robot::m_Limelight;
+Claw Robot::m_Claw;
+IntakeTilt Robot::m_IntakeTilt;
+HomeTilt Robot::m_HomeTilt;
+HomeClaw Robot::m_HomeClaw;
 
 
 // ------------------------ General (All Modes) --------------------
 
 // Function is called when the robot object is first created
 void Robot::RobotInit() {
-  m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
+  //m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
@@ -102,8 +107,12 @@ void Robot::TeleopInit() {
     m_autonomousCommand = nullptr;
   }
 
-  // run teleop command - run robot tank drive
-  m_defaultTeleOp.Start();
+  // temporary //
+  // reset elevator to home position (CAUTION: assumes elevator is down)
+  m_Elevator.ResetEncoderPosition();
+  m_Elevator.SetElevatorTargetAnalog(0);
+  m_HomeTilt.Start();
+  m_HomeClaw.Start();
 }
 
 // This function is called every time period while robot is in TeleOp Mode

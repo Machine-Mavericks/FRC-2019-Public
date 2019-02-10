@@ -50,7 +50,7 @@ void TankDrive::Execute() {
   left_y = left_y * throttle;
 
   // set main drive tank speeds
-  Robot::m_MainDrive.TankDrive (left_y, right_y);
+  Robot::m_MainDrive.SetTankDrive (left_y, right_y);
 }
 
 // Make this return true when this Command no longer needs to run execute()

@@ -19,29 +19,37 @@
 // subsystem definitions
 #include "subsystems/MainDrive.h"
 #include "subsystems/NavX.h"
+#include "subsystems/Elevator.h"
+#include "subsystems/Limelight.h"
+#include "subsystems/Claw.h"
+#include "subsystems/IntakeTilt.h"
 
 // command definitions
-#include "commands/TankDrive.h"
 #include "commands/MyAutoCommand.h"
+#include "commands/HomeTilt.h"
+#include "commands/HomeClaw.h"
+//#include "commands/ElevatorManualControl.h"
 
 
 class Robot : public frc::TimedRobot {
   public:
   
   // create commands
- //  static StraightDrive m_StraightDrive;
+  static HomeTilt m_HomeTilt;
+  static HomeClaw m_HomeClaw;
 
   // create subsystems;
   static MainDrive m_MainDrive;
   static NavX m_NavX;
+  static Elevator m_Elevator;
+  static Limelight m_Limelight;
+  static Claw m_Claw;
+  static IntakeTilt m_IntakeTilt;
   
   // create robot driver interfaces
   static DriverOI m_DriverOI;
   static MechanismOI m_MechanismOI;
   static DashboardOI m_DashboardOI;
-
-  // default teleop mode - as tank drive
-  static TankDrive m_defaultTeleOp;
 
   // Robot mode-independent funtcions
   void RobotInit() override;

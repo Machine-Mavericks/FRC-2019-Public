@@ -8,11 +8,11 @@
 #include "Robot.h"
 #include <frc/commands/Scheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Joystick.h>
-#include <frc/PWMVictorSPX.h>
-#include <frc/TimedRobot.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include "DashboardOI.h"
+//#include <frc/Joystick.h>
+//#include <frc/PWMVictorSPX.h>
+//#include <frc/TimedRobot.h>
+//#include <frc/smartdashboard/SmartDashboard.h>
+//#include "DashboardOI.h"
 
 
 DriverOI Robot::m_DriverOI;
@@ -20,14 +20,20 @@ MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
-TankDrive Robot::m_defaultTeleOp;
+Elevator Robot::m_Elevator;
+Limelight Robot::m_Limelight;
+Claw Robot::m_Claw;
+IntakeTilt Robot::m_IntakeTilt;
+LobClaw Robot::m_LobClaw;
+//TurnToAngle Robot::m_TurnToAngle;
+//DistanceDrive Robot::m_DistanceDrive;
 
 
 // ------------------------ General (All Modes) --------------------
 
 // Function is called when the robot object is first created
 void Robot::RobotInit() {
-  m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
+  //m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
@@ -102,8 +108,14 @@ void Robot::TeleopInit() {
     m_autonomousCommand = nullptr;
   }
 
-  // run teleop command - run robot tank drive
-  m_defaultTeleOp.Start();
+  // temporary //
+  // reset elevator to home position (CAUTION: assumes elevator is down)
+  m_Elevator.ResetEncoderPosition();
+  m_Elevator.SetElevatorTargetAnalog(0);
+  m_IntakeTilt.InitPositionControl();
+  
+  //m_HomeTilt.Start();
+  //m_HomeClaw.Start();
 }
 
 // This function is called every time period while robot is in TeleOp Mode

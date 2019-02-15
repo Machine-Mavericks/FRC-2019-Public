@@ -34,5 +34,7 @@ class MechanismOI {
     JoystickButton *MechanismJoystickButton6;
     JoystickButton *MechanismJoystickButton7;
     JoystickButton *MechanismJoystickButton8;
+    JoystickButton *MechanismJoystickButton9;
+    JoystickButton *MechanismJoystickButton10;
 
 };

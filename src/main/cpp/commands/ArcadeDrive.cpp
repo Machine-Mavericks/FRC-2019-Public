@@ -45,13 +45,12 @@ void ArcadeDrive::Execute() {
   y = LINEAR_WEIGHT * raw_y + CUBIC_WEIGHT * pow(raw_y, 3); 
   x = LINEAR_WEIGHT * raw_x + CUBIC_WEIGHT * pow(raw_x, 3); 
 
-
   // apply throttle control (scaling factor) to both left and right values.
   y = y * throttle;
   x = x * throttle;
 
   // set main drive tank speeds
-  Robot::m_MainDrive.ArcadeDrive (y, x, false);
+  Robot::m_MainDrive.SetArcadeDrive (y, x, false);
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -67,6 +66,4 @@ void ArcadeDrive::End() {
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void ArcadeDrive::Interrupted() {
-  // we are finished arcade drive - resume normal Teleop mode (tank drive)
-  Robot::m_defaultTeleOp.Start();
 }

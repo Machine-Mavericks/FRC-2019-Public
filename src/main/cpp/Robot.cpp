@@ -8,29 +8,34 @@
 #include "Robot.h"
 #include <frc/commands/Scheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Joystick.h>
-#include <frc/PWMVictorSPX.h>
-#include <frc/TimedRobot.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include "DashboardOI.h"
+#include "detection/TargetDetection.h"
 
-
+RobotPrefs Robot::m_Prefs;
 DriverOI Robot::m_DriverOI;
 MechanismOI Robot::m_MechanismOI;
 DashboardOI Robot::m_DashboardOI;
 MainDrive Robot::m_MainDrive;
 NavX Robot::m_NavX;
-TankDrive Robot::m_defaultTeleOp;
-
+Elevator Robot::m_Elevator;
+Limelight Robot::m_Limelight;
+CameraTilt Robot::m_CameraTilt;
+IntakeTilt Robot::m_IntakeTilt;
+TiltHome Robot::m_TiltHome;
+ClawHome Robot::m_ClawHome;
+Claw Robot::m_Claw;
+Snowblower Robot::m_Snowblower;
+LobClaw Robot::m_LobClaw;
 
 // ------------------------ General (All Modes) --------------------
 
 // Function is called when the robot object is first created
-void Robot::RobotInit() {
-  m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
+void Robot::RobotInit()
+{
+  //m_chooser.SetDefaultOption("Default TeleOp", &m_defaultTeleOp);
   //m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+  m_Prefs.ResetToDefaults();
 }
 
 // This function is called every robot packet, no matter the mode. Use
@@ -38,27 +43,32 @@ void Robot::RobotInit() {
 // autonomous, teleoperated and test.
 // <p> This runs after the mode specific periodic functions, but before
 // LiveWindow and SmartDashboard integrated updating. */
-void Robot::RobotPeriodic() {
-  
+void Robot::RobotPeriodic()
+{
+
   // update driver dashboard
   m_DashboardOI.UpdateDashBoard();
-}
 
+  // TEMPORARY
+  // filter camera results
+  FilterCameraChevronResults();
+}
 
 // ------------------------ Disabled Mode --------------------
 
 // This function is called once each time the robot enters Disabled mode. You
 // can use it to reset any subsystem information you want to clear when the
 // robot is disabled.
-void Robot::DisabledInit() {
+void Robot::DisabledInit()
+{
 }
 
 // This function is called every time period while robot is in Disabled Mode
-void Robot::DisabledPeriodic() {
-    // run scheduler to operator any commands as required
+void Robot::DisabledPeriodic()
+{
+  // run scheduler to operator any commands as required
   frc::Scheduler::GetInstance()->Run();
-  }
-
+}
 
 // ------------------------ Autonomous Mode --------------------
 
@@ -70,7 +80,8 @@ void Robot::DisabledPeriodic() {
 // You can add additional auto modes by adding additional commands to the
 // chooser code above (like the commented example) or additional comparisons to
 // the if-else structure below with additional strings & commands. */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
   // std::string autoSelected = frc::SmartDashboard::GetString(
   //     "Auto Selector", "Default");
   // if (autoSelected == "My Auto") {
@@ -78,52 +89,89 @@ void Robot::AutonomousInit() {
   // } else {
   //   m_autonomousCommand = &m_defaultAuto;
   // }
-  m_autonomousCommand = m_chooser.GetSelected();
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Start();
-  }
+  //m_autonomousCommand = m_chooser.GetSelected();
+  //if (m_autonomousCommand != nullptr)
+  //{
+  //  m_autonomousCommand->Start();
+  //}
+  #ifdef ROBOTTYPE_CLAW
+    // if we already have not homed the tilt, then proceed to home it
+    if (!m_TiltHome.IsFinished())
+      m_TiltHome.Start();
+    
+    // home the claw
+    if (!m_ClawHome.IsFinished())
+      m_ClawHome.Start();
+  #endif
 }
 
 // This function is called every tiem period while robot is in Autonomous Mode
-void Robot::AutonomousPeriodic() {
-    // run scheduler to operator any commands as required
+void Robot::AutonomousPeriodic()
+{
+  // run scheduler to operator any commands as required
   frc::Scheduler::GetInstance()->Run();
-  }
-
+}
 
 // ------------------------ Teleop Mode --------------------
 
-// This function is called once each time the robot enters Teleop mode. 
-void Robot::TeleopInit() {
+// This function is called once each time the robot enters Teleop mode.
+void Robot::TeleopInit()
+{
   // This makes sure that the autonomous stops running when
-  // teleop starts running. 
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
-  }
+  // teleop starts running.
+  //if (m_autonomousCommand != nullptr)
+  //{
+  //  m_autonomousCommand->Cancel();
+  //  m_autonomousCommand = nullptr;
+  //}
 
-  // run teleop command - run robot tank drive
-  m_defaultTeleOp.Start();
+  // temporary //
+  // reset elevator to home position (CAUTION: assumes elevator is down)
+  m_Elevator.ResetEncoderPosition();
+  m_Elevator.SetElevatorTargetAnalog(0);
+
+  #ifdef ROBOTTYPE_CLAW
+    // if we already have not homed the tilt, then proceed to home it
+    if (!m_TiltHome.IsFinished())
+      m_TiltHome.Start();
+    
+    // home the claw
+    if (!m_ClawHome.IsFinished())
+      m_ClawHome.Start();
+  #endif
+
+  #ifdef ROBOTTYPE_SNOWBLOWER
+    m_IntakeTilt.InitPositionControl();
+  #endif
 }
 
 // This function is called every time period while robot is in TeleOp Mode
-void Robot::TeleopPeriodic() {
+void Robot::TeleopPeriodic()
+{
   // run scheduler to operator any commands as required
   frc::Scheduler::GetInstance()->Run();
-  }
+}
 
 
 // ------------------------ Test Mode --------------------
 
-// This function is called every tiem period while robot is in Test Mode
-void Robot::TestPeriodic() {
-  }
 
+// This function is called once each time the robot enters Test mode.
+void Robot::TestInit()
+{
+}
+
+// This function is called every time period while robot is in Test Mode
+void Robot::TestPeriodic()
+{
+}
 
 // ------------------------ Main Program --------------------
 
-
 // create a robot object
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main()
+{
+  return frc::StartRobot<Robot>();
+}
 #endif

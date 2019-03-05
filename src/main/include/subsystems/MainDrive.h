@@ -47,17 +47,16 @@ public:
   void InitDefaultCommand() override;
 
   // Drive in Tank Drive - where left and right motors are driven independently
-  void TankDrive(float LeftSpeed, float RightSpeed);
+  void SetTankDrive(float LeftSpeed, float RightSpeed);
 
   // Drive robot in Arcade Drive (Constant arc speed around z axis)
-  void ArcadeDrive(float XSpeed, float ZRotation, bool Quickturn);
+  void SetArcadeDrive(float XSpeed, float ZRotation, bool Quickturn);
 
   // Drive robot in Curvature Drive (Constant rotational speed around z axis)
-  void CurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn);
+  void SetCurvatureDrive(float XSpeed, float ZSpeed, bool Quickturn);
  
 
   // ------------- Drive Encoder Functions -------------
-
 
 
   // reset the left /right encoders

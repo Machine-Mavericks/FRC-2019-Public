@@ -7,9 +7,13 @@
 
 #pragma once
 
+#include "RobotMap.h"
 #include <frc/TimedRobot.h>
 #include <frc/commands/Command.h>
 #include <frc/smartdashboard/SendableChooser.h>
+
+// robot preferences definitions
+#include "RobotPrefs.h"
 
 // operator interface definitions
 #include "DriverOI.h"
@@ -19,29 +23,51 @@
 // subsystem definitions
 #include "subsystems/MainDrive.h"
 #include "subsystems/NavX.h"
+#include "subsystems/Elevator.h"
+#include "subsystems/Limelight.h"
+#include "subsystems/CameraTilt.h"
+#include "subsystems/IntakeTilt.h"
+#include "subsystems/Claw.h"
+#include "subsystems/Snowblower.h"
+#include "subsystems/LobClaw.h"
+#include "subsystems/IndicatorLight.h"
+
 
 // command definitions
-#include "commands/TankDrive.h"
 #include "commands/MyAutoCommand.h"
+#include "commands/TiltHome.h"
+#include "commands/ClawHome.h"
+#include "commands/ChangeLight.h"
+
 
 
 class Robot : public frc::TimedRobot {
   public:
-  
-  // create commands
- //  static StraightDrive m_StraightDrive;
+  // create preferences
+  static RobotPrefs m_Prefs;
 
+  // create commands
+  static TiltHome m_TiltHome;
+  static ClawHome m_ClawHome;
+  static ChangeLight m_ChangeLight;
+ 
   // create subsystems;
   static MainDrive m_MainDrive;
   static NavX m_NavX;
+  static Elevator m_Elevator;
+  static Limelight m_Limelight;
+  static CameraTilt m_CameraTilt;
+  static IntakeTilt m_IntakeTilt;
+  static Claw m_Claw;
+  static Snowblower m_Snowblower;
+  static LobClaw m_LobClaw;
+  static IndicatorLight m_IndicatorLight;
+ 
   
   // create robot driver interfaces
   static DriverOI m_DriverOI;
   static MechanismOI m_MechanismOI;
   static DashboardOI m_DashboardOI;
-
-  // default teleop mode - as tank drive
-  static TankDrive m_defaultTeleOp;
 
   // Robot mode-independent funtcions
   void RobotInit() override;

@@ -9,8 +9,15 @@
 #include "DriverOI.h"
 #include "RobotMap.h"
 #include "Robot.h"
-#include "commands/ArcadeDrive.h"
+#include "commands/DriveArcade.h"
+#include "commands/DriveGoToTarget.h"
+#include "commands/CameraSwitchPipeline.h"
+#include "commands/TiltHome.h"
 
+#include "commands/DriveTurnToAngle.h"  // TEMPORARY
+#include "commands/DriveStraightDistance.h"
+#include "commands/AutoRun.h"
+#include "commands/LH2R.h"
 
 // class constructor - executed upon creation of DriverOI object
 // creates joystick operator interfaces
@@ -43,9 +50,27 @@ DriverOI::DriverOI() {
     // -------------Button-Initiated Commands -------------
     
     // set robot arcade mode drive to function while right joystick trigger is pressed
-    RightJoystickButton1->WhileHeld(new ArcadeDrive());
+    RightJoystickButton1->WhileHeld(new DriveArcade());
 
 
+    // while left joystick trigger is held, automatically chase after target
+    LeftJoystickButton1->WhileHeld(new DriveGoToTarget(0.35));
 
+
+    // set limelight camera pipeline number - 0 for ball, 1 for chevron target
+    // used to allow driver to select target type
+    LeftJoystickButton3->WhenPressed(new CameraSwitchPipeline(0));
+    LeftJoystickButton5->WhenPressed(new CameraSwitchPipeline(1));
+
+
+    /*////////////////////// TEMPORARY /////////////////////////////
+    // for testing only
+    LeftJoystickButton4->WhileHeld(new AutoRun());
+
+    LeftJoystickButton6->WhenPressed(new DriveTurnToAngle(90.0, 1.0, 0.5, 0.0));
+    LeftJoystickButton8->WhenPressed(new DriveTurnToAngle(-90.0, 1.0, 0.5, 0.0));
+
+    RightJoystickButton8->WhenPressed(new TiltHome());
+    RightJoystickButton7->WhileHeld(new LH2R());
+    */
 }
- 

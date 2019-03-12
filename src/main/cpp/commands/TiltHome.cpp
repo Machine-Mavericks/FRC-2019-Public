@@ -19,6 +19,9 @@ TiltHome::TiltHome() {
 
   // command is not to run when robot is disabled
   SetRunWhenDisabled(false);
+
+  m_Finished=false;
+  m_Time=0.0;
 }
 
 // Called just before this Command runs the first time

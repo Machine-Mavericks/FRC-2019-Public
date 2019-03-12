@@ -12,19 +12,22 @@
 #include "commands/CameraSwitchPipeline.h"
 #include "commands/DriveGoToTarget.h"
 #include "commands/ClawOpen.h"
+#include "commands/TiltMid.h"
 
 AutoRun::AutoRun() {
+  // driver must raise elevator 
+  AddSequential(new ClawOpen());
   AddParallel(new CameraSwitchPipeline(0));
   AddParallel(new TiltUp());
   AddSequential(new DriveStraightDistance(96.0, 0.45)); 
-  AddParallel(new ClawOpen());
   AddSequential(new DriveTurnToAngle(22.0,3.0, 0.5,0.0 )); 
   AddSequential(new DriveStraightDistance(56.0, 0.45)); 
+  AddSequential(new TiltMid());
   AddSequential(new DriveGoToTarget(0.35));
-  AddSequential(new DriveStraightDistance(-60.0,0.45));
+ /* AddSequential(new DriveStraightDistance(-60.0,0.45));
   AddSequential(new DriveTurnToAngle(-90.0,3.0,0.5,0.0));
   AddSequential(new DriveStraightDistance(86,0.45));
   AddSequential(new DriveTurnToAngle(-90.0,3.0,0.5,0.0));
   AddSequential(new DriveStraightDistance(84,0.45));
-  AddSequential(new DriveGoToTarget(0.35));
+  AddSequential(new DriveGoToTarget(0.35)); */
 }

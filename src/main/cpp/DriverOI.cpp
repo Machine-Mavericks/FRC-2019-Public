@@ -62,10 +62,11 @@ DriverOI::DriverOI() {
     LeftJoystickButton3->WhenPressed(new CameraSwitchPipeline(0));
     LeftJoystickButton5->WhenPressed(new CameraSwitchPipeline(1));
 
+    LeftJoystickButton4->WhileHeld(new AutoRun());
 
     /*////////////////////// TEMPORARY /////////////////////////////
     // for testing only
-    LeftJoystickButton4->WhileHeld(new AutoRun());
+   
 
     LeftJoystickButton6->WhenPressed(new DriveTurnToAngle(90.0, 1.0, 0.5, 0.0));
     LeftJoystickButton8->WhenPressed(new DriveTurnToAngle(-90.0, 1.0, 0.5, 0.0));

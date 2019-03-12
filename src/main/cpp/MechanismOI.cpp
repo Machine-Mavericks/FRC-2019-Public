@@ -20,7 +20,6 @@
 #include "commands/SnowblowerOff.h"
 #include "commands/LobClawOpenClose.h"
 
-
 // class constructor - executed upon creation of MechanismOI object
 // creates joystick operator interfaces
 MechanismOI::MechanismOI() {

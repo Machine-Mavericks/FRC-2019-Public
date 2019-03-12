@@ -40,6 +40,8 @@ void Robot::RobotInit() {
 
   m_ChangeLight.Start();
 
+  // reset elevator encoder
+  m_Elevator.ResetEncoderPosition();
 
 }
 
@@ -92,6 +94,13 @@ void Robot::AutonomousInit() {
   if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Start();
   }
+
+  #ifdef ROBOTTYPE_CLAW
+    if (!m_TiltHome.IsFinished())
+      m_TiltHome.Start();
+    if (!m_ClawHome.IsFinished())
+     m_ClawHome.Start();
+  #endif
 }
 
 // This function is called every tiem period while robot is in Autonomous Mode
@@ -114,12 +123,14 @@ void Robot::TeleopInit() {
 
   // temporary //
   // reset elevator to home position (CAUTION: assumes elevator is down)
-  m_Elevator.ResetEncoderPosition();
-  m_Elevator.SetElevatorTargetAnalog(0);
+  //m_Elevator.ResetEncoderPosition();
+  //m_Elevator.SetElevatorTargetAnalog(0);
   
   #ifdef ROBOTTYPE_CLAW
-    m_TiltHome.Start();
-    m_ClawHome.Start();
+    if (!m_TiltHome.IsFinished())
+      m_TiltHome.Start();
+    if (!m_ClawHome.IsFinished())
+     m_ClawHome.Start();
   #endif
 
   #ifdef ROBOTTYPE_SNOWBLOWER

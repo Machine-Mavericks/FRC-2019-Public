@@ -19,6 +19,12 @@ ClawHome::ClawHome() {
 
   // command is not to run when robot is disabled
   SetRunWhenDisabled(false);
+
+   // command is not finished util proven otherwise
+  m_Finished = false;
+  
+  // reset timer
+  m_Time = 0.0;
 }
 
 // Called just before this Command runs the first time

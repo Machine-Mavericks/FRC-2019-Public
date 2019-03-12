@@ -62,7 +62,7 @@ void DriveTurnToAngle::Execute() {
     m_IntegratedError = 0;
 
   // PI output
-  float PIOutput = 0.05 * error + 0.08*m_IntegratedError;     // .05
+  float PIOutput = 0.05 * error + 0.04*m_IntegratedError;     // .05
 
   // apply speed limit
   if (PIOutput > m_zSpeed)

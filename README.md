@@ -13,22 +13,6 @@ Commands include TankDrive and ArcadeDrive
 Constants now in Robotmap.h
 All driver station updates moved to DriverStation.h
 
-Known issues:
-1) May require fine-tuning of joystick response characteristics which can be done at later date
-
-For next release:
-1) Add functional Limelight camera subsystem
-2) TBD
-
-
-Jan 15/2019: Initial KN
-Inlcudes tank drive mode - only when robot is in teleop mode.
-Known issues:
-1) Need to create file to contain all robot constants, in place of hard-coded numbers
-2) Tank drive joystick drive requires dead-zone and adjustment to joystick response characteristics for more precise low-speed driving
-
-
-
 
 
 

@@ -1,4 +1,5 @@
-# FRC-2019-Build
+# FRC-2019-Public
+
 Public Release of Machine Mavericks robot control system using 2019 FRC libraries
 
 Repository includes source (src) files folder. Copy 'src' folder into main robot project folder and rebuild project
